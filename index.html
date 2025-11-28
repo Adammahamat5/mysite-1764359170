@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LambdaMine Pro - Minage de $LAMDA</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen text-white">
+    <custom-navbar></custom-navbar>
+    
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                LambdaMine Pro
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8">
+                Minez des tokens $LAMDA toutes les 2 heures !
+            </p>
+        </section>
+
+        <!-- Mining Dashboard -->
+        <section class="max-w-4xl mx-auto bg-gray-800/50 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-gray-700/50">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Current Balance -->
+                <div class="bg-gradient-to-br from-purple-600/20 to-blue-600/20 p-6 rounded-2xl border border-purple-500/30">
+                    <div class="flex items-center mb-4">
+                        <i data-feather="dollar-sign" class="text-cyan-400 mr-3"></i>
+                        <h3 class="text-lg font-semibold">Solde Actuel</h3>
+                    </div>
+                    <p class="text-3xl font-bold text-cyan-400" id="currentBalance">0.000000</p>
+                    <p class="text-gray-400 text-sm mt-2">$LAMDA</p>
+                </div>
+
+                <!-- Mining Rate -->
+                <div class="bg-gradient-to-br from-blue-600/20 to-green-600/20 p-6 rounded-2xl border border-blue-500/30">
+                    <div class="flex items-center mb-4">
+                        <i data-feather="zap" class="text-blue-400 mr-3"></i>
+                        <h3 class="text-lg font-semibold">Taux de Minage</h3>
+                    </div>
+                    <p class="text-3xl font-bold text-blue-400">0.00001</p>
+                    <p class="text-gray-400 text-sm mt-2">$LAMDA/sec</p>
+                </div>
+
+                <!-- Next Mining -->
+                <div class="bg-gradient-to-br from-green-600/20 to-cyan-600/20 p-6 rounded-2xl border border-green-500/30">
+                    <div class="flex items-center mb-4">
+                        <i data-feather="clock" class="text-green-400 mr-3"></i>
+                        <h3 class="text-lg font-semibold">Prochain Minage</h3>
+                    </div>
+                    <p class="text-3xl font-bold text-green-400" id="nextMiningTime">--:--:--</p>
+                    <p class="text-gray-400 text-sm mt-2">HH:MM:SS</p>
+                </div>
+            </div>
+
+            <!-- Mining Progress -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Progression du Cycle</h3>
+                    <span class="text-cyan-400 font-bold" id="progressPercentage">0%</span>
+                </div>
+                <div class="bg-gray-700 rounded-full h-4">
+                    <div id="miningProgress" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                </div>
+                <p class="text-gray-400 text-sm mt-2 text-center">
+                    Cycle de 2 heures • Récolte automatique
+                </p>
+            </div>
+
+            <!-- Mining Control -->
+            <div class="text-center">
+                <button id="startMiningBtn" class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i data-feather="play" class="inline mr-2"></i>
+                    Démarrer le Minage
+                </button>
+                
+                <button id="claimBtn" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-8 rounded-2xl text-lg ml-4 transition-all duration-300 transform hover:scale-105 shadow-lg opacity-50 cursor-not-allowed">
+                    <i data-feather="download" class="inline mr-2"></i>
+                    Récolter (2h)
+                </button>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="max-w-4xl mx-auto mt-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Statistiques de Minage</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center mb-4">
+                        <i data-feather="bar-chart-2" class="text-purple-400 mr-3"></i>
+                        <h3 class="text-lg font-semibold">Performance</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Total Miné</span>
+                            <span class="text-white font-semibold" id="totalMined">0.000000 $LAMDA</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Cycles Complétés</span>
+                            <span class="text-white font-semibold" id="cyclesCompleted">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Efficacité</span>
+                            <span class="text-green-400 font-semibold">99.8%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center mb-4">
+                        <i data-feather="trending-up" class="text-blue-400 mr-3"></i>
+                        <h3 class="text-lg font-semibold">Rendement Estimé</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Par Heure</span>
+                            <span class="text-white font-semibold">0.036 $LAMDA</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Par Jour</span>
+                            <span class="text-white font-semibold">0.864 $LAMDA</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Par Mois</span>
+                            <span class="text-white font-semibold">25.92 $LAMDA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <!-- Scripts -->
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
